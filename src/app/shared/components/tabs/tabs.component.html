@@ -1,0 +1,78 @@
+<div class="tabs__group border-bottom-1 block" style="border-color: #efefef">
+  <div class="tabs__list" role="tablist" #tabsList>
+    <!-- Tabs list -->
+    @for(primaryTab of items; track $index){
+    <div
+      data-tab-section="tabs-items"
+      class="tabs__item"
+      [class.tabs__item--disabled]="primaryTab.isDisabled()"
+    >
+      <p-button
+        type="button"
+        class="tabs__link"
+        (click)="setActiveIndex($index)"
+        [disabled]="primaryTab.isDisabled()"
+        [attr.aria-label]="primaryTab.title()"
+        [attr.aria-selected]="primaryTab.isActive()"
+        [class.tabs__link--active]="activeIndex() === $index"
+        [class.tabs__link--disabled]="primaryTab.isDisabled()"
+        role="tab"
+      >
+        {{ primaryTab.title() }}
+      </p-button>
+    </div>
+    }
+    <div class="tabs__item-more" [class.tabs__item--hidden]="moreIsVisible()">
+      <!-- Button more -->
+      <button
+        type="button"
+        class="tabs__link"
+        [attr.aria-label]="'More'"
+        [attr.aria-expanded]="dropdownIsVisible()"
+        [attr.aria-selected]="activeIndexIsHidden()"
+        [class.tabs__link--active]="activeIndexIsHidden()"
+        (click)="toggleDropdown()"
+        role="tab"
+        #toggle
+      >
+        Mais <i class="pi pi-angle-down"></i>
+      </button>
+      <!--
+      <div class="card flex justify-content-center">
+        <p-menu #menu [model]="itemsForTabs()" [popup]="true" />
+        <p-button (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
+      </div> -->
+
+      <!-- Dropdown -->
+      @if(dropdownIsVisible()){
+      <div class="tabs__list-sub" role="dialog" aria-modal="true">
+        @for(secondaryTab of items; track $index ){
+        <div
+          data-tab-section="more-items"
+          class="tabs__item"
+          [class.tabs__item--disabled]="secondaryTab.isDisabled()"
+        >
+          <button
+            type="button"
+            class="tabs__link"
+            (click)="setActiveIndex($index)"
+            [disabled]="secondaryTab.isDisabled()"
+            [attr.aria-label]="secondaryTab.title"
+            [attr.aria-selected]="secondaryTab.isActive()"
+            [class.tabs__link--active]="activeIndex() === $index"
+            [class.tabs__link--disabled]="secondaryTab.isDisabled()"
+            role="tab"
+          >
+            {{ secondaryTab.title() }}
+          </button>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="tabs__wrapper">
+  <ng-content></ng-content>
+</div>

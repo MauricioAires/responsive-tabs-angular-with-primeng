@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { TabComponent } from './shared/components/tabs/tab/tab.component';
+import { TabsComponent } from './shared/components/tabs/tabs.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [TabComponent, TabsComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'responsive-tabs-angular-with-primeng';
+  public tabsLoopExample: string[] = [
+    'John Cleese',
+    'Eric Idle',
+    'Michael Palin',
+    'Terry Jones',
+    'Terry Gilliam',
+    'Graham Chapman',
+  ];
 }
