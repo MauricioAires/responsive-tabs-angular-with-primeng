@@ -16,6 +16,7 @@
         [attr.aria-selected]="primaryTab.isActive()"
         [class.tabs__link--active]="activeIndex() === $index"
         [class.tabs__link--disabled]="primaryTab.isDisabled()"
+        [attr.data-tab-title]="primaryTab.title()"
         role="tab"
       >
         {{ primaryTab.title() }}
@@ -24,55 +25,57 @@
     }
     <div class="tabs__item-more" [class.tabs__item--hidden]="moreIsVisible()">
       <!-- Button more -->
-      <button
-        type="button"
+      <div
+        role="tab"
         class="tabs__link"
         [attr.aria-label]="'More'"
-        [attr.aria-expanded]="dropdownIsVisible()"
         [attr.aria-selected]="activeIndexIsHidden()"
         [class.tabs__link--active]="activeIndexIsHidden()"
-        (click)="toggleDropdown()"
-        role="tab"
         #toggle
       >
-        Mais <i class="pi pi-angle-down"></i>
-      </button>
-      <!--
-      <div class="card flex justify-content-center">
-        <p-menu #menu [model]="itemsForTabs()" [popup]="true" />
-        <p-button (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
-      </div> -->
-
-      <!-- Dropdown -->
-      @if(dropdownIsVisible()){
-      <div class="tabs__list-sub" role="dialog" aria-modal="true">
-        @for(secondaryTab of items; track $index ){
-        <div
-          data-tab-section="more-items"
-          class="tabs__item"
-          [class.tabs__item--disabled]="secondaryTab.isDisabled()"
-        >
-          <button
-            type="button"
-            class="tabs__link"
-            (click)="setActiveIndex($index)"
-            [disabled]="secondaryTab.isDisabled()"
-            [attr.aria-label]="secondaryTab.title"
-            [attr.aria-selected]="secondaryTab.isActive()"
-            [class.tabs__link--active]="activeIndex() === $index"
-            [class.tabs__link--disabled]="secondaryTab.isDisabled()"
-            role="tab"
-          >
-            {{ secondaryTab.title() }}
-          </button>
+        <div>
+          <p-menu appendTo="body" #menu [model]="itemsMenu()" [popup]="true" />
+          <p-button (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
         </div>
-        }
       </div>
-      }
     </div>
   </div>
 </div>
 
 <div class="tabs__wrapper">
+  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Praesentium
+  excepturi repudiandae illum asperiores doloremque consequuntur, corporis dolor
+  aperiam ea facilis numquam ipsa, temporibus commodi inventore explicabo sunt
+  adipisci? Exercitationem, repellendus! Lorem ipsum dolor sit amet consectetur
+  adipisicing elit. Iusto necessitatibus ad nihil deserunt eligendi odit porro
+  voluptates magni adipisci, maxime impedit dolorum culpa, ipsam tempora
+  deleniti ex repellendus rem tenetur. Lorem ipsum, dolor sit amet consectetur
+  adipisicing elit. Praesentium excepturi repudiandae illum asperiores
+  doloremque consequuntur, corporis dolor aperiam ea facilis numquam ipsa,
+  temporibus commodi inventore explicabo sunt adipisci? Exercitationem,
+  repellendus! Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
+  necessitatibus ad nihil deserunt eligendi odit porro voluptates magni
+  adipisci, maxime impedit dolorum culpa, ipsam tempora deleniti ex repellendus
+  rem tenetur.Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+  Praesentium excepturi repudiandae illum asperiores doloremque consequuntur,
+  corporis dolor aperiam ea facilis numquam ipsa, temporibus commodi inventore
+  explicabo sunt adipisci? Exercitationem, repellendus! Lorem ipsum dolor sit
+  amet consectetur adipisicing elit. Iusto necessitatibus ad nihil deserunt
+  eligendi odit porro voluptates magni adipisci, maxime impedit dolorum culpa,
+  ipsam tempora deleniti ex repellendus rem tenetur.Lorem ipsum, dolor sit amet
+  consectetur adipisicing elit. Praesentium excepturi repudiandae illum
+  asperiores doloremque consequuntur, corporis dolor aperiam ea facilis numquam
+  ipsa, temporibus commodi inventore explicabo sunt adipisci? Exercitationem,
+  repellendus! Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
+  necessitatibus ad nihil deserunt eligendi odit porro voluptates magni
+  adipisci, maxime impedit dolorum culpa, ipsam tempora deleniti ex repellendus
+  rem tenetur.Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+  Praesentium excepturi repudiandae illum asperiores doloremque consequuntur,
+  corporis dolor aperiam ea facilis numquam ipsa, temporibus commodi inventore
+  explicabo sunt adipisci? Exercitationem, repellendus! Lorem ipsum dolor sit
+  amet consectetur adipisicing elit. Iusto necessitatibus ad nihil deserunt
+  eligendi odit porro voluptates magni adipisci, maxime impedit dolorum culpa,
+  ipsam tempora deleniti ex repellendus rem tenetur.
+
   <ng-content></ng-content>
 </div>

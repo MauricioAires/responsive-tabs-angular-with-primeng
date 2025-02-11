@@ -10,12 +10,16 @@ import { TabsComponent } from './shared/components/tabs/tabs.component';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  public tabsLoopExample: string[] = [
-    'John Cleese',
-    'Eric Idle',
-    'Michael Palin',
-    'Terry Jones',
-    'Terry Gilliam',
-    'Graham Chapman',
+  public tabsLoopExample = [
+    { label: 'John Cleese', route: '/john-cleese' },
+    { label: 'Eric Idle', route: '/eric-idle' },
+    { label: 'Michael Palin', route: '/michael-palin' },
+    { label: 'Terry Jones', route: '/terry-jones' },
+    { label: 'Terry Gilliam', route: '/terry-gilliam' },
+    { label: 'Graham Chapman', route: '/graham-chapman' },
   ];
+
+  protected handleActiveIndexChanged(event: any): void {
+    console.log(event);
+  }
 }

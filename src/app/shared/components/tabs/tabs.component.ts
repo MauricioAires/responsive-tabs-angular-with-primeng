@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   contentChildren,
@@ -11,7 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { TabComponent } from './tab/tab.component';
+import { EmitValue, TabComponent } from './tab/tab.component';
 // PrimeNG
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
@@ -28,10 +28,9 @@ import { MenuItem } from 'primeng/api';
     class: 'tabs',
   },
 })
-export class TabsComponent implements AfterViewChecked {
+export class TabsComponent implements AfterViewInit {
   // Services
-  private elementRef =
-    inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private cdRef = inject(ChangeDetectorRef);
   // Refs
   protected tabsList = viewChild('tabsList', {
@@ -42,17 +41,15 @@ export class TabsComponent implements AfterViewChecked {
   });
   protected tabs = contentChildren(TabComponent);
   // Outputs
-  public activeIndexChanged = output<number>();
+  public activeIndexChanged = output<EmitValue>();
   // Properties
-  protected headerOffset = signal<number>(0);
   protected activeIndex = signal<number>(0);
-  protected resizeTimeout = signal<number>(0);
 
-  protected dropdownIsVisible = signal<boolean>(false);
   protected moreIsVisible = signal<boolean>(false);
+  // Defines the button `more items` is active
   protected activeIndexIsHidden = signal<boolean>(false);
 
-  protected itemsForTabs = signal<MenuItem[] | undefined>(undefined);
+  protected itemsMenu = signal<MenuItem[]>([] as MenuItem[]);
   get items(): TabComponent[] {
     return Array.from<TabComponent>(this.tabs());
   }
@@ -60,29 +57,11 @@ export class TabsComponent implements AfterViewChecked {
   @HostListener('window:resize', ['$event'])
   public onWindowResize() {
     this.renderTabs();
-    this.dropdownIsVisible.set(false);
-  }
-  @HostListener('window:scroll', ['$event'])
-  public onWindowScroll() {
-    this.dropdownIsVisible.set(false);
-  }
-  @HostListener('document:keydown.escape', ['$event'])
-  public onKeydownHandler(): void {
-    this.dropdownIsVisible.set(false);
-  }
-  @HostListener('document:click', ['$event'])
-  public onDocumentClick($event: MouseEvent): void {
-    const target = $event.target as Node | null;
-
-    const clickInside = this.elementRef.contains(target) || false;
-
-    if (this.dropdownIsVisible && !clickInside) {
-      this.dropdownIsVisible.set(false);
-      this.toggle()?.nativeElement.blur();
-    }
   }
 
-  public ngAfterViewChecked(): void {
+  public ngAfterViewInit(): void {
+    if (!this.items) return;
+
     this.items.forEach((tab, index) => {
       if (this.activeIndex() === undefined && tab.isActive()) {
         this.activeIndex.set(index);
@@ -96,40 +75,32 @@ export class TabsComponent implements AfterViewChecked {
   public setActiveIndex(index: number): void {
     this.activeIndex.set(index);
 
-    this.items.forEach((tab, i) => {
-      tab.isActive.set(i === this.activeIndex());
-    });
+    const selectedTab = this.items[index];
+    const tabValue: EmitValue = selectedTab ? selectedTab.value() : '';
 
-    this.activeIndexChanged.emit(this.activeIndex());
-    this.dropdownIsVisible.set(false);
+    this.items.forEach((tab, i) => tab.isActive.set(i === index));
+
+    this.activeIndexChanged.emit(tabValue);
     this.renderTabs();
   }
 
-  private showItem(item: HTMLElement): void {
+  private showTabItem(item: HTMLElement): void {
     item.classList.remove('tabs__item--hidden');
     item.querySelector('button')?.removeAttribute('disabled');
   }
-
-  public toggleDropdown(): void {
-    this.dropdownIsVisible.set(!this.dropdownIsVisible());
+  private hideTabItem(item: HTMLElement): void {
+    item.classList.add('tabs__item--hidden');
+    item.querySelector('button')?.setAttribute('disabled', 'true');
   }
 
   public renderTabs(): void {
-    /**
-     * I can't use a viewChild for the .tabs_item because they are in two places,
-     * but maybe I could use two variables
-     */
-
-    const primaryItems = this.elementRef.querySelectorAll<HTMLElement>(
-      '[data-tab-section="tabs-items"]'
-    );
-    const secondaryItems = this.elementRef.querySelectorAll<HTMLElement>(
-      '[data-tab-section="more-items"]'
-    );
+    const primaryItems =
+      this.elementRef.nativeElement.querySelectorAll<HTMLElement>(
+        '[data-tab-section="tabs-items"]'
+      );
 
     // Define all items visible and enabled
-    primaryItems.forEach(this.showItem);
-    secondaryItems.forEach(this.showItem);
+    primaryItems.forEach(this.showTabItem);
 
     // Hide Primary-Tabs if they don't fir into the view.
     // The smaller with is the width of the button
@@ -140,6 +111,9 @@ export class TabsComponent implements AfterViewChecked {
     const safetyOffset = 10;
     const flexGap = 25;
 
+    // Reset options menu
+    this.itemsMenu.set([]);
+
     primaryItems.forEach((item, index) => {
       if (
         primaryWidth - safetyOffset >=
@@ -147,25 +121,32 @@ export class TabsComponent implements AfterViewChecked {
       ) {
         stopWidth += item.offsetWidth + flexGap;
       } else {
-        item.classList.add('tabs__item--hidden');
-        item.querySelector('button')?.setAttribute('disabled', 'true');
+        this.hideTabItem(item);
+
         hiddenItems.push(index);
+
+        const labelItem =
+          item
+            .querySelector('[data-tab-title]')
+            ?.getAttribute('data-tab-title') ?? '';
+
+        this.itemsMenu.update((state) => [
+          ...state,
+          {
+            label: labelItem,
+            command: () => {
+              this.setActiveIndex(index);
+            },
+          },
+        ]);
       }
     });
 
     // Set secondary-Tabs visibility
-
     if (!hiddenItems.length) {
       this.moreIsVisible.set(true);
     } else {
       this.moreIsVisible.set(false);
-
-      secondaryItems.forEach((item, index) => {
-        if (!hiddenItems.includes(index)) {
-          item.classList.add('tabs__item--hidden');
-          item.querySelector('button')?.setAttribute('disabled', 'true');
-        }
-      });
     }
 
     this.activeIndexIsHidden.set(hiddenItems.includes(this.activeIndex()));
