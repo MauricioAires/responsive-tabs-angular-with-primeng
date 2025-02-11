@@ -2,41 +2,8 @@
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
-// /* Order */
-// @layer reset, primeng;
-
-// /* Reset CSS */
-// @layer reset {
-//   button,
-//   input {
-//     font-size: 1rem;
-//   }
-// }
-
-* {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  box-sizing: border-box;
-}
-
-body {
-  padding: 0;
-  margin: 0;
-  min-height: 100%;
-  overflow: auto;
-  color: var(--neutral-high-contrast);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scrollbar-width: thin;
-}
-
-html {
-  font-size: 62.5%;
-  background: #ffffff;
-}
-
-body {
-  font-family: "Arial";
-  font-size: 1.6rem;
-  color: rgba(27, 31, 59, 0.65);
+:root {
+  --color-primary: #017f4e;
+  --color-primary-hover: #effff9;
+  --neutral-border: #dbdbdb;
 }

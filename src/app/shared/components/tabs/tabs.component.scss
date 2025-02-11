@@ -1,63 +1,30 @@
-:host {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+$color-primary: var(--color-primary);
+$neutral-border: var(--neutral-border);
+$color-primary-hover: var(--color-primary-hover);
+
+:host ::ng-deep {
+  .p-button {
+    background: transparent;
+    color: $color-primary;
+    font-weight: 600;
+    border: transparent;
+
+    &:hover {
+      background: $color-primary-hover;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
 }
 
 .tabs {
-  &__list {
-    position: relative;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 2.5rem;
-    justify-content: flex-start;
-    width: auto;
-  }
-
-  &__list-sub {
-    position: absolute;
-    overflow: hidden;
-    z-index: 5;
-    top: calc(100% + 1rem);
-    max-width: 80vw;
-    right: 0;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.5rem;
-    list-style-type: none;
-    margin: 0;
-    background: white;
-    border-radius: 0.75rem;
-    border: 0.1rem solid #ededed;
-    color: inherit;
-    box-shadow: 0 0.5rem 1.5rem -1rem rgba(0, 0, 0, 0.25);
-    padding: 1.5rem;
-  }
-
-  &__wrapper {
-    margin-bottom: 2rem;
+  &__group {
+    border-color: $neutral-border;
   }
 
   &__link {
-    -webkit-appearance: none;
-    border: 0;
-    outline: none;
-    background: transparent;
-    padding: 1rem 0;
-    margin: 0;
-    cursor: pointer;
-    font: inherit;
-    color: currentColor;
-    transition: all 0.25s ease;
-    white-space: nowrap;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
-
     &::before {
       content: "";
       border-radius: 0.75rem;
@@ -67,24 +34,26 @@
       pointer-events: none;
     }
 
-    &:focus-visible:before {
-      border-color: currentColor;
-    }
-
     &::after {
       content: "";
       position: absolute;
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      background: #526ed3;
+      background: $color-primary;
       width: 0;
       height: 0.2rem;
       transition: all 0.25s ease;
     }
 
+    &:hover {
+      &::after {
+        width: 100%;
+      }
+    }
+
     &--active {
-      color: #526ed3;
+      color: $color-primary;
 
       &::after {
         width: 100%;
@@ -93,41 +62,7 @@
 
     &:hover:not([disabled]),
     &:focus:not([disabled]) {
-      color: #526ed3;
-    }
-
-    &--disabled {
-      pointer-events: none;
-    }
-  }
-
-  &__item {
-    position: relative;
-
-    &-more {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &--hidden {
-      display: none;
-    }
-
-    &--disabled {
-      opacity: 0.3;
-    }
-  }
-
-  &__icon {
-    pointer-events: none;
-    font-size: 1.15rem;
-    line-height: 0;
-    transform: rotate(90deg);
-
-    &--open {
-      transform: rotate(-90deg);
+      color: $color-primary;
     }
   }
 }

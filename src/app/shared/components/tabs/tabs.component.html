@@ -1,30 +1,40 @@
-<div class="tabs__group border-bottom-1 block" style="border-color: #efefef">
-  <div class="tabs__list" role="tablist" #tabsList>
+<div class="tabs__group max-w-full border-bottom-1 block">
+  <div
+    class="relative p-0 m-0 flex gap-5 w-auto list-none justify-content-start"
+    role="tablist"
+    #tabsList
+  >
     <!-- Tabs list -->
     @for(primaryTab of items; track $index){
     <div
       data-tab-section="tabs-items"
-      class="tabs__item"
-      [class.tabs__item--disabled]="primaryTab.isDisabled()"
+      class="relative"
+      [class.opacity-30]="primaryTab.isDisabled()"
     >
       <p-button
         type="button"
-        class="tabs__link"
+        class="tabs__link white-space-nowrap"
         (click)="setActiveIndex($index)"
         [disabled]="primaryTab.isDisabled()"
         [attr.aria-label]="primaryTab.title()"
         [attr.aria-selected]="primaryTab.isActive()"
         [class.tabs__link--active]="activeIndex() === $index"
-        [class.tabs__link--disabled]="primaryTab.isDisabled()"
+        [class.tabs__link--disabled]="!primaryTab.isDisabled()"
         [attr.data-tab-title]="primaryTab.title()"
         role="tab"
+        styleClass="background: transparent"
       >
         {{ primaryTab.title() }}
       </p-button>
     </div>
     }
-    <div class="tabs__item-more" [class.tabs__item--hidden]="moreIsVisible()">
-      <!-- Button more -->
+
+    <!-- Button more -->
+    <div
+      class="relative justify-content-center align-items-center"
+      [class.hidden]="moreIsVisible()"
+      [class.flex]="!moreIsVisible()"
+    >
       <div
         role="tab"
         class="tabs__link"
@@ -40,42 +50,4 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="tabs__wrapper">
-  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Praesentium
-  excepturi repudiandae illum asperiores doloremque consequuntur, corporis dolor
-  aperiam ea facilis numquam ipsa, temporibus commodi inventore explicabo sunt
-  adipisci? Exercitationem, repellendus! Lorem ipsum dolor sit amet consectetur
-  adipisicing elit. Iusto necessitatibus ad nihil deserunt eligendi odit porro
-  voluptates magni adipisci, maxime impedit dolorum culpa, ipsam tempora
-  deleniti ex repellendus rem tenetur. Lorem ipsum, dolor sit amet consectetur
-  adipisicing elit. Praesentium excepturi repudiandae illum asperiores
-  doloremque consequuntur, corporis dolor aperiam ea facilis numquam ipsa,
-  temporibus commodi inventore explicabo sunt adipisci? Exercitationem,
-  repellendus! Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
-  necessitatibus ad nihil deserunt eligendi odit porro voluptates magni
-  adipisci, maxime impedit dolorum culpa, ipsam tempora deleniti ex repellendus
-  rem tenetur.Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  Praesentium excepturi repudiandae illum asperiores doloremque consequuntur,
-  corporis dolor aperiam ea facilis numquam ipsa, temporibus commodi inventore
-  explicabo sunt adipisci? Exercitationem, repellendus! Lorem ipsum dolor sit
-  amet consectetur adipisicing elit. Iusto necessitatibus ad nihil deserunt
-  eligendi odit porro voluptates magni adipisci, maxime impedit dolorum culpa,
-  ipsam tempora deleniti ex repellendus rem tenetur.Lorem ipsum, dolor sit amet
-  consectetur adipisicing elit. Praesentium excepturi repudiandae illum
-  asperiores doloremque consequuntur, corporis dolor aperiam ea facilis numquam
-  ipsa, temporibus commodi inventore explicabo sunt adipisci? Exercitationem,
-  repellendus! Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto
-  necessitatibus ad nihil deserunt eligendi odit porro voluptates magni
-  adipisci, maxime impedit dolorum culpa, ipsam tempora deleniti ex repellendus
-  rem tenetur.Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-  Praesentium excepturi repudiandae illum asperiores doloremque consequuntur,
-  corporis dolor aperiam ea facilis numquam ipsa, temporibus commodi inventore
-  explicabo sunt adipisci? Exercitationem, repellendus! Lorem ipsum dolor sit
-  amet consectetur adipisicing elit. Iusto necessitatibus ad nihil deserunt
-  eligendi odit porro voluptates magni adipisci, maxime impedit dolorum culpa,
-  ipsam tempora deleniti ex repellendus rem tenetur.
-
-  <ng-content></ng-content>
 </div>

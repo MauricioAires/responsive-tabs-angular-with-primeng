@@ -85,11 +85,11 @@ export class TabsComponent implements AfterViewInit {
   }
 
   private showTabItem(item: HTMLElement): void {
-    item.classList.remove('tabs__item--hidden');
+    item.classList.remove('hidden');
     item.querySelector('button')?.removeAttribute('disabled');
   }
   private hideTabItem(item: HTMLElement): void {
-    item.classList.add('tabs__item--hidden');
+    item.classList.add('hidden');
     item.querySelector('button')?.setAttribute('disabled', 'true');
   }
 

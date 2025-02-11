@@ -1,7 +1,5 @@
 <app-tabs (activeIndexChanged)="handleActiveIndexChanged($event)">
   @for(tab of tabsLoopExample; track $index){
-  <app-tab [emitValue]="tab" [title]="tab.label" [active]="$index === 0">
-    {{ "Content of " + tab }}
-  </app-tab>
+  <app-tab [emitValue]="tab" [title]="tab.label" [active]="$index === 0" />
   }
 </app-tabs>
