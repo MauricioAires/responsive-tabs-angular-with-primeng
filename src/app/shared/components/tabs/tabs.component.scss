@@ -1,8 +1,15 @@
 $color-primary: var(--color-primary);
 $neutral-border: var(--neutral-border);
 $color-primary-hover: var(--color-primary-hover);
+$color-disabled: var(--color-disabled);
 
 :host ::ng-deep {
+  .p-disabled {
+    .p-button {
+      color: $color-disabled;
+    }
+  }
+
   .p-button {
     background: transparent;
     color: $color-primary;

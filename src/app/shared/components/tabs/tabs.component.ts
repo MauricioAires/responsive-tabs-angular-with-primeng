@@ -109,7 +109,7 @@ export class TabsComponent implements AfterViewInit {
     const primaryWidth = this.tabsList()?.nativeElement.offsetWidth;
     const hiddenItems: number[] = [];
     const safetyOffset = 10;
-    const flexGap = 25;
+    const flexGap = 32;
 
     // Reset options menu
     this.itemsMenu.set([]);
@@ -130,15 +130,22 @@ export class TabsComponent implements AfterViewInit {
             .querySelector('[data-tab-title]')
             ?.getAttribute('data-tab-title') ?? '';
 
+        const isDisabled = item
+          .querySelector('[data-tab-disabled]')
+          ?.getAttribute('data-tab-disabled');
+
         this.itemsMenu.update((state) => [
           ...state,
           {
             label: labelItem,
+            disabled: isDisabled === 'true',
             command: () => {
               this.setActiveIndex(index);
             },
           },
         ]);
+
+        console.log(this.itemsMenu());
       }
     });
 

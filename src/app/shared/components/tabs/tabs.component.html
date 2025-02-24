@@ -1,4 +1,4 @@
-<div class="tabs__group max-w-full border-bottom-1 block">
+<div class="tabs__group overflow-hidden max-w-full border-bottom-1 block">
   <div
     class="relative p-0 m-0 flex gap-5 w-auto list-none justify-content-start"
     role="tablist"
@@ -6,11 +6,7 @@
   >
     <!-- Tabs list -->
     @for(primaryTab of items; track $index){
-    <div
-      data-tab-section="tabs-items"
-      class="relative"
-      [class.opacity-30]="primaryTab.isDisabled()"
-    >
+    <div data-tab-section="tabs-items" class="relative">
       <p-button
         type="button"
         class="tabs__link white-space-nowrap"
@@ -19,10 +15,10 @@
         [attr.aria-label]="primaryTab.title()"
         [attr.aria-selected]="primaryTab.isActive()"
         [class.tabs__link--active]="activeIndex() === $index"
-        [class.tabs__link--disabled]="!primaryTab.isDisabled()"
+        [class.tabs__link--disabled]="primaryTab.isDisabled()"
         [attr.data-tab-title]="primaryTab.title()"
+        [attr.data-tab-disabled]="primaryTab.disabled()"
         role="tab"
-        styleClass="background: transparent"
       >
         {{ primaryTab.title() }}
       </p-button>
