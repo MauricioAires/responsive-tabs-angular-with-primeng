@@ -11,12 +11,43 @@ import { TabsComponent } from './shared/components/tabs/tabs.component';
 })
 export class AppComponent {
   public tabsLoopExample = [
-    { label: 'John Cleese', route: '/john-cleese' },
-    { label: 'Eric Idle', route: '/eric-idle' },
-    { label: 'Michael Palin', route: '/michael-palin' },
-    { label: 'Terry Jones', route: '/terry-jones' },
-    { label: 'Terry Gilliam', route: '/terry-gilliam' },
-    { label: 'Graham Chapman', route: '/graham-chapman' },
+    {
+      label: 'Informações gerais',
+      route: 'informacoes-gerais',
+    },
+    {
+      label: 'Assistente comercial',
+      route: 'assistente-comercial',
+    },
+    {
+      label: 'Atendimento',
+      route: 'Atendimento',
+    },
+    {
+      label: 'Comissão',
+      route: 'Comissão',
+      disabled: true,
+    },
+    {
+      label: 'Filial',
+      route: 'Filial',
+    },
+    {
+      label: 'Informações de acesso',
+      route: 'Informações de acesso ',
+    },
+    {
+      label: 'Propostas de crédito',
+      route: 'propostas-de-credito',
+    },
+    {
+      label: 'Permissões',
+      route: 'Permissões',
+    },
+    {
+      label: 'Histórico de atividade',
+      route: 'Histórico de atividade',
+    },
   ];
 
   protected handleActiveIndexChanged(event: any): void {
