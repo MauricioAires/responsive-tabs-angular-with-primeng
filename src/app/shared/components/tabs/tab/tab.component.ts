@@ -15,8 +15,9 @@ export type EmitValue =
 })
 export class TabComponent implements OnInit {
   public title = input<string>();
-  public active = input<boolean>();
+  public active = input<boolean>(true);
   public disabled = input<boolean>(false);
+  public hidden = input<boolean>(false);
   /**
    * @param emitValue  The value that will be send when the tab is clicked
    */
@@ -25,13 +26,12 @@ export class TabComponent implements OnInit {
   public isActive = signal<boolean>(false);
   public isDisabled = signal<boolean>(false);
   public value = signal<EmitValue>('');
+  public isHidden = signal<boolean>(false);
 
   public ngOnInit(): void {
-    if (this.active()) {
-      this.isActive.set(true);
-    }
-
+    this.isActive.set(this.active());
     this.value.set(this.emitValue());
     this.isDisabled.set(this.disabled());
+    this.isHidden.set(this.hidden());
   }
 }

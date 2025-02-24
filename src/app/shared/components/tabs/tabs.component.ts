@@ -139,13 +139,14 @@ export class TabsComponent implements AfterViewInit {
           {
             label: labelItem,
             disabled: isDisabled === 'true',
+            state: {
+              active: index === this.activeIndex(),
+            },
             command: () => {
               this.setActiveIndex(index);
             },
           },
         ]);
-
-        console.log(this.itemsMenu());
       }
     });
 

@@ -7,3 +7,10 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [provideAnimations(), provideRouter(routes)],
 };
+
+/**
+ * @TODO Mauricio Aires
+ *
+ * 1. adicionar navegação utilizando o teclado
+ * 2. avaliar a acessibilidade.
+ */

@@ -5,7 +5,7 @@
     #tabsList
   >
     <!-- Tabs list -->
-    @for(primaryTab of items; track $index){
+    @for(primaryTab of items; track $index){ @if(!primaryTab.isHidden()){
     <div data-tab-section="tabs-items" class="relative">
       <p-button
         type="button"
@@ -23,7 +23,7 @@
         {{ primaryTab.title() }}
       </p-button>
     </div>
-    }
+    } }
 
     <!-- Button more -->
     <div
@@ -40,7 +40,18 @@
         #toggle
       >
         <div>
-          <p-menu appendTo="body" #menu [model]="itemsMenu()" [popup]="true" />
+          <p-menu appendTo="body" #menu [model]="itemsMenu()" [popup]="true">
+            <ng-template pTemplate="item" let-item>
+              <a
+                [class.border-green-700]="item.state.active"
+                [class.bg-gray-100]="item.state.active"
+                [class.border-white]="!item.state.active"
+                class="border-left-2 hover:border-green-700 flex align-items-center p-menuitem-link"
+              >
+                <span class="ml-2">{{ item.label }}</span>
+              </a>
+            </ng-template>
+          </p-menu>
           <p-button (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
         </div>
       </div>
