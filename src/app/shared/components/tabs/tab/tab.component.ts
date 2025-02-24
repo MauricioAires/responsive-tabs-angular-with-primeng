@@ -2,7 +2,7 @@ import { Component, input, OnInit, signal } from '@angular/core';
 
 export type EmitValue =
   | {
-      [key: string]: string | number;
+      [key: string]: string | number | boolean | undefined;
     }
   | string;
 
@@ -16,6 +16,7 @@ export type EmitValue =
 export class TabComponent implements OnInit {
   public title = input<string>();
   public active = input<boolean>();
+  public disabled = input<boolean>(false);
   /**
    * @param emitValue  The value that will be send when the tab is clicked
    */
@@ -31,5 +32,6 @@ export class TabComponent implements OnInit {
     }
 
     this.value.set(this.emitValue());
+    this.isDisabled.set(this.disabled());
   }
 }
