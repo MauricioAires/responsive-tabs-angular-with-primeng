@@ -1,56 +1,93 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { TabComponent } from './shared/components/tabs/tab/tab.component';
 import { TabsComponent } from './shared/components/tabs/tabs.component';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
+interface Tab {
+  label: string;
+  route: string;
+  active: boolean;
+  disabled?: boolean;
+}
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [TabComponent, TabsComponent],
+  imports: [TabComponent, TabsComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  public tabsLoopExample = [
+export class AppComponent implements OnInit {
+  // Services
+  private router = inject(Router);
+  // Properties
+  public tabsLoopExample = signal<Tab[]>([
     {
       label: 'Informações gerais',
-      route: 'informacoes-gerais',
+      route: 'access-information',
+      active: false,
     },
     {
       label: 'Assistente comercial',
-      route: 'assistente-comercial',
+      route: 'sales-assistant',
+      active: false,
     },
     {
       label: 'Atendimento',
-      route: 'Atendimento',
+      route: 'service',
+      active: false,
     },
     {
       label: 'Comissão',
-      route: 'Comissão',
+      route: 'commission',
       disabled: true,
+      active: false,
     },
     {
       label: 'Filial',
-      route: 'Filial',
+      route: 'branch',
+      active: false,
     },
     {
       label: 'Informações de acesso',
-      route: 'Informações de acesso ',
+      route: 'general-information',
+      active: false,
     },
     {
       label: 'Propostas de crédito',
-      route: 'propostas-de-credito',
+      route: 'credit-proposals',
+      active: false,
     },
     {
       label: 'Permissões',
-      route: 'Permissões',
+      route: 'permissions',
+      active: false,
     },
     {
       label: 'Histórico de atividade',
-      route: 'Histórico de atividade',
+      route: 'activity-history',
+      active: false,
     },
-  ];
+  ]);
+
+  public ngOnInit(): void {
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd
+        )
+      )
+      .subscribe(({ url }) => {
+        this.tabsLoopExample.update((state) =>
+          state.map((item) => ({ ...item, active: url.endsWith(item.route) }))
+        );
+      });
+  }
 
   protected handleActiveIndexChanged(event: any): void {
     console.log(event);
+    this.router.navigateByUrl(event.route);
   }
 }

@@ -1,11 +1,13 @@
 <app-tabs (activeIndexChanged)="handleActiveIndexChanged($event)">
-  @for(tab of tabsLoopExample; track $index){
+  @for(tab of tabsLoopExample(); track tab){
   <app-tab
     [emitValue]="tab"
     [title]="tab.label"
     [disabled]="tab.disabled || false"
-    [active]="$index === 0"
+    [active]="tab.active"
     [hidden]="$index === 6"
   />
   }
 </app-tabs>
+
+<router-outlet></router-outlet>
