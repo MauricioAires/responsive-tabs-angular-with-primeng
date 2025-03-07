@@ -14,6 +14,7 @@
         [disabled]="tab.isDisabled()"
         [attr.aria-label]="tab.title()"
         [attr.aria-selected]="tab.isActive()"
+        [attr.aria-disabled]="tab.isDisabled()"
         [class.tabs__link--active]="activeIndex() === tab.title()"
         [class.tabs__link--disabled]="tab.isDisabled()"
         [attr.data-tab-title]="tab.title()"
