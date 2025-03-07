@@ -1,9 +1,14 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { TabComponent } from './shared/components/tabs/tab/tab.component';
 import { TabsComponent } from './shared/components/tabs/tabs.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 
 interface Tab {
   label: string;
@@ -77,7 +82,8 @@ export class AppComponent implements OnInit {
       .pipe(
         filter(
           (event): event is NavigationEnd => event instanceof NavigationEnd
-        )
+        ),
+        take(1)
       )
       .subscribe(({ url }) => {
         this.tabsLoopExample.update((state) =>
@@ -87,7 +93,6 @@ export class AppComponent implements OnInit {
   }
 
   protected handleActiveIndexChanged(event: any): void {
-    console.log(event);
     this.router.navigateByUrl(event.route);
   }
 }
