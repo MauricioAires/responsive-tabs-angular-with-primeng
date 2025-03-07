@@ -86,6 +86,7 @@ export class AppComponent implements OnInit {
         take(1)
       )
       .subscribe(({ url }) => {
+        console.log(url);
         this.tabsLoopExample.update((state) =>
           state.map((item) => ({ ...item, active: url.endsWith(item.route) }))
         );
