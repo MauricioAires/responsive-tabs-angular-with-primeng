@@ -8,7 +8,7 @@ import {
 import { TabComponent } from './shared/components/tabs/tab/tab.component';
 import { TabsComponent } from './shared/components/tabs/tabs.component';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { filter, take } from 'rxjs/operators';
+import { filter, take, tap } from 'rxjs/operators';
 
 interface Tab {
   label: string;
@@ -85,10 +85,14 @@ export class AppComponent implements OnInit {
         ),
         take(1)
       )
-      .subscribe(({ url }) => {
-        console.log(url);
+      .subscribe(({ url, urlAfterRedirects }) => {
+        const currentURL = url === '/' ? urlAfterRedirects : url;
+
         this.tabsLoopExample.update((state) =>
-          state.map((item) => ({ ...item, active: url.endsWith(item.route) }))
+          state.map((item) => ({
+            ...item,
+            active: currentURL.endsWith(item.route),
+          }))
         );
       });
   }
