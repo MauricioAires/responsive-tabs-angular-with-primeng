@@ -5,22 +5,23 @@
     #tabsList
   >
     <!-- Tabs list -->
-    @for(primaryTab of items; track $index){ @if(!primaryTab.isHidden()){
+    @for(tab of items; track $index){ @if(!tab.isHidden()){
     <div data-tab-section="tabs-items" class="relative">
       <p-button
         type="button"
         class="tabs__link white-space-nowrap"
-        (click)="setActiveIndex($index)"
-        [disabled]="primaryTab.isDisabled()"
-        [attr.aria-label]="primaryTab.title()"
-        [attr.aria-selected]="primaryTab.isActive()"
-        [class.tabs__link--active]="activeIndex() === $index"
-        [class.tabs__link--disabled]="primaryTab.isDisabled()"
-        [attr.data-tab-title]="primaryTab.title()"
-        [attr.data-tab-disabled]="primaryTab.disabled()"
+        (click)="setActiveIndex(tab.title())"
+        [disabled]="tab.isDisabled()"
+        [attr.aria-label]="tab.title()"
+        [attr.aria-selected]="tab.isActive()"
+        [class.tabs__link--active]="activeIndex() === tab.title()"
+        [class.tabs__link--disabled]="tab.isDisabled()"
+        [attr.data-tab-title]="tab.title()"
+        [attr.data-tab-disabled]="tab.disabled()"
         role="tab"
+        [id]="tab.title()"
       >
-        {{ primaryTab.title() }}
+        {{ tab.title() }}
       </p-button>
     </div>
     } }
@@ -34,7 +35,7 @@
       <div
         role="tab"
         class="tabs__link"
-        [attr.aria-label]="'More'"
+        [attr.aria-label]="'More tabs'"
         [attr.aria-selected]="activeIndexIsHidden()"
         [class.tabs__link--active]="activeIndexIsHidden()"
         #toggle
@@ -52,7 +53,11 @@
               </a>
             </ng-template>
           </p-menu>
-          <p-button (onClick)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
+          <p-button
+            ariaLabel="More tabs"
+            (onClick)="menu.toggle($event)"
+            icon="pi pi-ellipsis-v"
+          />
         </div>
       </div>
     </div>

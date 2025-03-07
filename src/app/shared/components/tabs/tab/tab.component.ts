@@ -1,31 +1,31 @@
-import { Component, input, OnInit, signal } from '@angular/core';
-
-export type EmitValue =
-  | {
-      [key: string]: string | number | boolean | undefined;
-    }
-  | string;
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
 
 @Component({
   selector: 'app-tab',
   standalone: true,
   imports: [],
-  templateUrl: './tab.component.html',
+  template: ``,
   styleUrl: './tab.component.scss',
 })
 export class TabComponent implements OnInit {
-  public title = input<string>();
+  public title = input.required<string>();
   public active = input<boolean>(true);
   public disabled = input<boolean>(false);
   public hidden = input<boolean>(false);
   /**
    * @param emitValue  The value that will be send when the tab is clicked
    */
-  public emitValue = input<EmitValue>('');
+  public emitValue = input<unknown>('');
 
   public isActive = signal<boolean>(false);
   public isDisabled = signal<boolean>(false);
-  public value = signal<EmitValue>('');
+  public value = signal<unknown>('');
   public isHidden = signal<boolean>(false);
 
   public ngOnInit(): void {

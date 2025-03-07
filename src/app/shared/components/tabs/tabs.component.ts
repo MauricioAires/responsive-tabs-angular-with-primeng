@@ -1,4 +1,5 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -11,7 +12,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { UntilDestroy } from '@ngneat/until-destroy';
-import { EmitValue, TabComponent } from './tab/tab.component';
+import { TabComponent } from './tab/tab.component';
 // PrimeNG
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
@@ -28,7 +29,7 @@ import { MenuItem } from 'primeng/api';
     class: 'tabs',
   },
 })
-export class TabsComponent implements AfterViewInit {
+export class TabsComponent implements AfterViewInit, AfterContentChecked {
   // Services
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private cdRef = inject(ChangeDetectorRef);
@@ -41,9 +42,9 @@ export class TabsComponent implements AfterViewInit {
   });
   protected tabs = contentChildren(TabComponent);
   // Outputs
-  public activeIndexChanged = output<EmitValue>();
+  public activeIndexChanged = output<unknown>();
   // Properties
-  protected activeIndex = signal<number>(0);
+  protected activeIndex = signal<string>('');
 
   protected moreIsVisible = signal<boolean>(false);
   // Defines the button `more items` is active
@@ -59,12 +60,25 @@ export class TabsComponent implements AfterViewInit {
     this.renderTabs();
   }
 
+  /**
+   * Verifica mudanças no conteúdo <ng-content>
+   */
+  public ngAfterContentChecked(): void {
+    this.updateActiveTab();
+  }
+  /**
+   * Indica que a view foi completamente renderizada
+   */
   public ngAfterViewInit(): void {
+    this.updateActiveTab();
+  }
+
+  private updateActiveTab() {
     if (!this.items) return;
 
-    this.items.forEach((tab, index) => {
-      if (this.activeIndex() === undefined && tab.isActive()) {
-        this.activeIndex.set(index);
+    this.items.forEach((tab) => {
+      if (this.activeIndex() === '' && tab.isActive()) {
+        this.activeIndex.set(tab.title());
       }
     });
 
@@ -72,13 +86,18 @@ export class TabsComponent implements AfterViewInit {
     this.cdRef.detectChanges();
   }
 
-  public setActiveIndex(index: number): void {
-    this.activeIndex.set(index);
+  public setActiveIndex(tabId: string): void {
+    this.activeIndex.set(tabId);
 
-    const selectedTab = this.items[index];
-    const tabValue: EmitValue = selectedTab ? selectedTab.value() : '';
+    const selectedTab = this.items.find(
+      (item) => item.title() === this.activeIndex()
+    );
 
-    this.items.forEach((tab, i) => tab.isActive.set(i === index));
+    const tabValue: unknown = selectedTab ? selectedTab.value() : '';
+
+    this.items.forEach((tab) =>
+      tab.isActive.set(tab.title() === this.activeIndex())
+    );
 
     this.activeIndexChanged.emit(tabValue);
     this.renderTabs();
@@ -107,14 +126,14 @@ export class TabsComponent implements AfterViewInit {
     let stopWidth = this.toggle()?.nativeElement.offsetWidth;
 
     const primaryWidth = this.tabsList()?.nativeElement.offsetWidth;
-    const hiddenItems: number[] = [];
+    const hiddenItems: string[] = [];
     const safetyOffset = 10;
     const flexGap = 32;
 
     // Reset options menu
     this.itemsMenu.set([]);
 
-    primaryItems.forEach((item, index) => {
+    primaryItems.forEach((item) => {
       if (
         primaryWidth - safetyOffset >=
         stopWidth + item.offsetWidth + flexGap
@@ -123,7 +142,11 @@ export class TabsComponent implements AfterViewInit {
       } else {
         this.hideTabItem(item);
 
-        hiddenItems.push(index);
+        const tabId = item
+          .querySelector('[data-tab-title]')
+          ?.getAttribute('id') as string;
+
+        hiddenItems.push(tabId);
 
         const labelItem =
           item
@@ -140,10 +163,10 @@ export class TabsComponent implements AfterViewInit {
             label: labelItem,
             disabled: isDisabled === 'true',
             state: {
-              active: index === this.activeIndex(),
+              active: tabId === this.activeIndex(),
             },
             command: () => {
-              this.setActiveIndex(index);
+              this.setActiveIndex(tabId);
             },
           },
         ]);
