@@ -6,8 +6,11 @@
     [disabled]="tab.disabled || false"
     [active]="tab.active"
     [hidden]="$index === 6"
+    [badge]="tab.badge"
   />
   }
 </app-tabs>
 
-<router-outlet></router-outlet>
+<div class="p-3">
+  <router-outlet></router-outlet>
+</div>

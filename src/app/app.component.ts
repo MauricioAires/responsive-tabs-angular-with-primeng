@@ -15,6 +15,7 @@ interface Tab {
   route: string;
   active: boolean;
   disabled?: boolean;
+  badge?: string;
 }
 
 @Component({
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
       label: 'Informações gerais',
       route: 'access-information',
       active: false,
+      badge: '2',
     },
     {
       label: 'Assistente comercial',
@@ -64,16 +66,19 @@ export class AppComponent implements OnInit {
       label: 'Propostas de crédito',
       route: 'credit-proposals',
       active: false,
+      badge: '5',
     },
     {
       label: 'Permissões',
       route: 'permissions',
       active: false,
+      badge: '22',
     },
     {
       label: 'Histórico de atividade',
       route: 'activity-history',
       active: false,
+      badge: '23',
     },
   ]);
 
