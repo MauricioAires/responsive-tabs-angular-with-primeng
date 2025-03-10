@@ -1,17 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, input, OnInit, signal } from '@angular/core';
 
 @Component({
   selector: 'app-tab',
   standalone: true,
   imports: [],
   template: ``,
-  styleUrl: './tab.component.scss',
 })
 export class TabComponent implements OnInit {
   public title = input.required<string>();
