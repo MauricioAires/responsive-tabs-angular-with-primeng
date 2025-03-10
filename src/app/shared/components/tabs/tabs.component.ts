@@ -11,14 +11,12 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { UntilDestroy } from '@ngneat/until-destroy';
 import { TabComponent } from './tab/tab.component';
 // PrimeNG
+import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
 
-@UntilDestroy()
 @Component({
   selector: 'app-tabs',
   standalone: true,
