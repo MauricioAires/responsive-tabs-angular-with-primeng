@@ -10,6 +10,17 @@ $color-disabled: var(--color-disabled);
     }
   }
 
+  // Tabs badge
+  .p-badge {
+    width: 24px;
+    height: 24px;
+    background: $color-primary;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
   .p-button {
     background: transparent;
     color: $color-primary;

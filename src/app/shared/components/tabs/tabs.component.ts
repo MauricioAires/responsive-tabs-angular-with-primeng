@@ -16,11 +16,12 @@ import { TabComponent } from './tab/tab.component';
 import { MenuItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'app-tabs',
   standalone: true,
-  imports: [ButtonModule, MenuModule],
+  imports: [ButtonModule, MenuModule, BadgeModule],
   templateUrl: './tabs.component.html',
   styleUrl: './tabs.component.scss',
   host: {
@@ -32,10 +33,10 @@ export class TabsComponent implements AfterViewInit, AfterContentChecked {
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private cdRef = inject(ChangeDetectorRef);
   // Refs
-  protected tabsList = viewChild('tabsList', {
+  protected tabsListRef = viewChild('tabsList', {
     read: ElementRef,
   });
-  protected toggle = viewChild('toggle', {
+  protected toggleButtonRef = viewChild('toggle', {
     read: ElementRef,
   });
   protected tabs = contentChildren(TabComponent);
@@ -48,7 +49,7 @@ export class TabsComponent implements AfterViewInit, AfterContentChecked {
   // Defines the button `more items` is active
   protected activeIndexIsHidden = signal<boolean>(false);
 
-  protected itemsMenu = signal<MenuItem[]>([] as MenuItem[]);
+  protected menuItems = signal<MenuItem[]>([] as MenuItem[]);
   get items(): TabComponent[] {
     return Array.from<TabComponent>(this.tabs());
   }
@@ -121,15 +122,15 @@ export class TabsComponent implements AfterViewInit, AfterContentChecked {
 
     // Hide Primary-Tabs if they don't fir into the view.
     // The smaller with is the width of the button
-    let stopWidth = this.toggle()?.nativeElement.offsetWidth;
+    let stopWidth = this.toggleButtonRef()?.nativeElement.offsetWidth;
 
-    const primaryWidth = this.tabsList()?.nativeElement.offsetWidth;
+    const primaryWidth = this.tabsListRef()?.nativeElement.offsetWidth;
     const hiddenItems: string[] = [];
     const safetyOffset = 10;
     const flexGap = 32;
 
     // Reset options menu
-    this.itemsMenu.set([]);
+    this.menuItems.set([]);
 
     primaryItems.forEach((item) => {
       if (
@@ -140,29 +141,25 @@ export class TabsComponent implements AfterViewInit, AfterContentChecked {
       } else {
         this.hideTabItem(item);
 
-        const tabId = item
-          .querySelector('[data-tab-title]')
-          ?.getAttribute('id') as string;
+        const tabItem = item.querySelector('[role="tab"]');
+
+        const tabLabel = tabItem?.getAttribute('data-tab-title') ?? '';
+        const tabId = tabItem?.getAttribute('id') as string;
+        const tabBadge = tabItem?.getAttribute('data-tab-badge') as string;
+        const tabIsDisabled =
+          tabItem?.getAttribute('data-tab-disabled') === 'true';
 
         hiddenItems.push(tabId);
 
-        const labelItem =
-          item
-            .querySelector('[data-tab-title]')
-            ?.getAttribute('data-tab-title') ?? '';
-
-        const isDisabled = item
-          .querySelector('[data-tab-disabled]')
-          ?.getAttribute('data-tab-disabled');
-
-        this.itemsMenu.update((state) => [
+        this.menuItems.update((state) => [
           ...state,
           {
-            label: labelItem,
-            disabled: isDisabled === 'true',
+            label: tabLabel,
+            disabled: tabIsDisabled,
             state: {
               active: tabId === this.activeIndex(),
             },
+            badge: tabBadge,
             command: () => {
               this.setActiveIndex(tabId);
             },

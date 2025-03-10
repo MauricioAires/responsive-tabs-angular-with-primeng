@@ -17,6 +17,7 @@ export class TabComponent implements OnInit {
   public title = input.required<string>();
   public active = input<boolean>(true);
   public disabled = input<boolean>(false);
+  public badge = input<string | undefined>('');
   public hidden = input<boolean>(false);
   /**
    * @param emitValue  The value that will be send when the tab is clicked

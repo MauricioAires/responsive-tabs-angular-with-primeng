@@ -19,8 +19,10 @@
         [class.tabs__link--disabled]="tab.isDisabled()"
         [attr.data-tab-title]="tab.title()"
         [attr.data-tab-disabled]="tab.disabled()"
+        [attr.data-tab-badge]="tab.badge()"
         role="tab"
         [id]="tab.title()"
+        [badge]="tab.badge()"
       >
         {{ tab.title() }}
       </p-button>
@@ -42,7 +44,7 @@
         #toggle
       >
         <div>
-          <p-menu appendTo="body" #menu [model]="itemsMenu()" [popup]="true">
+          <p-menu appendTo="body" #menu [model]="menuItems()" [popup]="true">
             <ng-template pTemplate="item" let-item>
               <a
                 [class.border-green-700]="item.state.active"
@@ -50,7 +52,19 @@
                 [class.border-white]="!item.state.active"
                 class="border-left-2 hover:border-green-700 flex align-items-center p-menuitem-link"
               >
-                <span class="ml-2">{{ item.label }}</span>
+                <span
+                  [title]="item.label"
+                  class="ml-2 white-space-nowrap text-overflow-ellipsis overflow-hidden"
+                  >{{ item.label }}</span
+                >
+
+                @if(item.badge){
+                <p-badge
+                  class="ml-auto"
+                  [style]="{ color: 'white', background: '#017f4e' }"
+                  [value]="item.badge"
+                />
+                }
               </a>
             </ng-template>
           </p-menu>
