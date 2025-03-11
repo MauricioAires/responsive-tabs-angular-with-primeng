@@ -1,6 +1,5 @@
 import {
-  AfterContentChecked,
-  AfterViewInit,
+  AfterViewChecked,
   ChangeDetectorRef,
   Component,
   contentChildren,
@@ -28,7 +27,7 @@ import { BadgeModule } from 'primeng/badge';
     class: 'tabs',
   },
 })
-export class TabsComponent implements AfterViewInit, AfterContentChecked {
+export class TabsComponent implements AfterViewChecked {
   // Services
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private cdRef = inject(ChangeDetectorRef);
@@ -60,15 +59,9 @@ export class TabsComponent implements AfterViewInit, AfterContentChecked {
   }
 
   /**
-   * Verifica mudanças no conteúdo <ng-content>
+   * Executed after each  view and  DOM check.
    */
-  public ngAfterContentChecked(): void {
-    this.updateActiveTab();
-  }
-  /**
-   * Indica que a view foi completamente renderizada
-   */
-  public ngAfterViewInit(): void {
+  public ngAfterViewChecked(): void {
     this.updateActiveTab();
   }
 
